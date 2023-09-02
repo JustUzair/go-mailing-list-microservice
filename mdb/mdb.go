@@ -57,7 +57,7 @@ func CreateEmail(db *sql.DB, email string) error {
 		log.Println(err)
 		return err
 	}
-	log.Println("Record Inserted ...")
+
 	return nil
 }
 
@@ -69,7 +69,6 @@ func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	log.Println("Record Inserted ...")
 
 	for rows.Next() {
 		return getEmailEntryFromRow(rows)
@@ -90,7 +89,6 @@ func UpdateEmail(db *sql.DB, entry EmailEntry) error {
 		log.Println(err)
 		return err
 	}
-	log.Println("Record Updated...")
 
 	return nil
 
