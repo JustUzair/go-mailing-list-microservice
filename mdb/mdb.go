@@ -35,7 +35,7 @@ func TryCreate(db *sql.DB) {
 	}
 }
 
-func emailEntryFromRow(row *sql.Rows) (*EmailEntry, error) {
+func getEmailEntryFromRow(row *sql.Rows) (*EmailEntry, error) {
 	var id int64
 	var email string
 	var confirmedAt int64
@@ -72,7 +72,7 @@ func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 	log.Println("Record Inserted ...")
 
 	for rows.Next() {
-		return emailEntryFromRow(rows)
+		return getEmailEntryFromRow(rows)
 	}
 	return nil, nil
 }
@@ -130,7 +130,7 @@ func GetEmailBatch(db *sql.DB, params BatchEmailQueryParams) ([]EmailEntry, erro
 	defer rows.Close()
 	emails := make([]EmailEntry, 0, params.Count)
 	for rows.Next() {
-		email, err := emailEntryFromRow(rows)
+		email, err := getEmailEntryFromRow(rows)
 		if err != nil {
 			return nil, err
 		}
