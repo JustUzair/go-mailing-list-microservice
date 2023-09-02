@@ -57,13 +57,12 @@ func CreateEmail(db *sql.DB, email string) error {
 		log.Println(err)
 		return err
 	}
-
 	return nil
 }
 
 func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 	rows, err := db.Query(
-		`select * from emails where email = ?`, email)
+		`select id,email,confirmed_at,opt_out from emails where email = ?`, email)
 	if err != nil {
 		log.Println(err)
 		return nil, err

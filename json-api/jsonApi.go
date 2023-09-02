@@ -115,7 +115,7 @@ func GetEmailBatch(db *sql.DB) http.Handler {
 
 func UpdateEmail(db *sql.DB) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		if req.Method != "PATCH" {
+		if req.Method != "PUT" {
 			return
 		}
 		entry := mdb.EmailEntry{}
@@ -124,6 +124,7 @@ func UpdateEmail(db *sql.DB) http.Handler {
 			returnErr(w, err, 400)
 			return
 		}
+
 		returnJSON(w, func() (interface{}, error) {
 			log.Printf("JSON UpdateEmail : %v\n", entry.Email)
 			return mdb.GetEmail(db, entry.Email)
