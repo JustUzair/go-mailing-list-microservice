@@ -11,8 +11,8 @@ import (
 type EmailEntry struct {
 	Id          int64
 	Email       string
-	confirmedAt *time.Time
-	optOut      bool
+	ConfirmedAt *time.Time
+	OptOut      bool
 }
 
 func TryCreate(db *sql.DB) {
@@ -47,7 +47,7 @@ func getEmailEntryFromRow(row *sql.Rows) (*EmailEntry, error) {
 		return nil, err
 	}
 	t := time.Unix(confirmedAt, 0)
-	return &EmailEntry{Id: id, Email: email, confirmedAt: &t, optOut: optOut}, nil
+	return &EmailEntry{Id: id, Email: email, ConfirmedAt: &t, OptOut: optOut}, nil
 }
 
 func CreateEmail(db *sql.DB, email string) error {
@@ -76,14 +76,14 @@ func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 }
 
 func UpdateEmail(db *sql.DB, entry EmailEntry) error {
-	t := entry.confirmedAt.Unix()
+	t := entry.ConfirmedAt.Unix()
 
 	_, err := db.Exec(`
 	Insert into emails(email,confirmed_at,opt_out) values (?,?,?)
 	on conflict(email) do update set
 	confirmed_at=?
 	opt_out=?
-	`, entry.Email, t, entry.confirmedAt, entry.optOut, t, entry.optOut)
+	`, entry.Email, t, entry.ConfirmedAt, entry.OptOut, t, entry.OptOut)
 	if err != nil {
 		log.Println(err)
 		return err
