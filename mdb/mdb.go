@@ -77,13 +77,12 @@ func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 
 func UpdateEmail(db *sql.DB, entry EmailEntry) error {
 	t := entry.ConfirmedAt.Unix()
-
 	_, err := db.Exec(`
 	Insert into emails(email,confirmed_at,opt_out) values (?,?,?)
 	on conflict(email) do update set
-	confirmed_at=?
+	confirmed_at=?,
 	opt_out=?
-	`, entry.Email, t, entry.ConfirmedAt, entry.OptOut, t, entry.OptOut)
+	`, entry.Email, t, entry.OptOut, t, entry.OptOut)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -95,7 +94,7 @@ func UpdateEmail(db *sql.DB, entry EmailEntry) error {
 
 func DeleteEmail(db *sql.DB, email string) error {
 	_, err := db.Exec(`
-	update emails set opt_out = true where email=?
+	update emails set opt_out = 1 where email=?
 	`, email)
 	if err != nil {
 		log.Println(err)

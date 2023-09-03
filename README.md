@@ -2,6 +2,17 @@
 
 This project requires a `gcc` compiler installed and the `protobuf` code generation tools.
 
+## Start the server 
+
+```bash
+    go run ./server
+```
+
+## Start the client
+```bash
+    go run ./client
+```
+
 ## Install protobuf compiler
 
 Install the `protoc` tool using the instructions available at [https://grpc.io/docs/protoc-installation/](https://grpc.io/docs/protoc-installation/).
@@ -25,3 +36,5 @@ protoc --go_out=. --go_opt=paths=source_relative \ --go-grpc_out=. --go-grpc_opt
 ```bash
 protoc --go_out=. --go_opt=paths=source_relative ./proto/mail.proto --go-grpc_out=. --go-grpc_opt=paths=source_relative ./proto/mail.proto
 ```
+
+
