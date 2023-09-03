@@ -1,7 +1,10 @@
 # Setup
 
 This project requires a `gcc` compiler installed and the `protobuf` code generation tools.
-
+## Install missing dependencies
+```bash
+    go mod tidy
+```
 ## Start the server 
 
 ```bash
