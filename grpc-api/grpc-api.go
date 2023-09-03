@@ -6,7 +6,10 @@ import (
 	"log"
 	mdb "mailinglist/mdb"
 	pb "mailinglist/proto"
+	"net"
 	"time"
+
+	"google.golang.org/grpc"
 )
 
 type MailServer struct {
@@ -98,4 +101,19 @@ func (s *MailServer) DeleteEmail(ctx context.Context, req *pb.DeleteEmailRequest
 		return &pb.EmailResponse{}, err
 	}
 	return emailResponse(s.db, req.EmailAddr)
+}
+
+func Serve(db *sql.DB, bind string) {
+	listener, err := net.Listen("tcp", bind)
+	if err != nil {
+		log.Fatalf("gPRC server error : failed to bind : %v\n", bind)
+	}
+	grpcServer := grpc.NewServer()
+	mailServer := MailServer{db: db}
+
+	pb.RegisterMailingListServiceServer(grpcServer, &mailServer)
+	log.Printf("gRPC API server listening on : %v\n", bind)
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("gRPC server error : %v\n", err)
+	}
 }
